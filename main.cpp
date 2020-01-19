@@ -26,7 +26,7 @@ int main()
         checkResponse(gameBoard, 'x');
 
         //check to see if player 'x' has four in a row somewhere on the board
-        gameWinner = gameBoard.determineWinner();
+        gameWinner = determineWinner(gameBoard);
         //if player 'x' has won, end the game
         if (gameWinner != 'z')
         {

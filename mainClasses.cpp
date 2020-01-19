@@ -1,123 +1,170 @@
-/*header file for main.cpp*/
-#include <iostream>
-#include <iomanip>
-#include <string>
-using namespace std;
+#include "main.hpp"
 
-class Gameboard
+class Board
 {
-    char gameSpace[16];
-    string name[2];
+private:
+    //the class tracks the game and the winner
+    char positionsSelected[16];
+    char winner;
+
 public:
-    Gameboard();
-    void setName(string nameInput, int index);
-    void setGameSpace(int pos, char value);
-    char getGameSpace(int pos);
-    int fourInRow(char sym);
-    void printInfo();
+    Board(); // if private --> can't access positionsSelected
+    char* getPositions(void);
+    int setPosition(int gridNumber, char user);
+    // char determineWinner();
+    // char checkRows();
+    // char checkColumns();
+    // char checkDiagonals();
 };
 
-Gameboard::Gameboard()
-{
+Board::Board()
+{   // sets the board to blanks and the winner to 'z'
+    // z = not determined or tie
+    winner = 'z';
     for (int i = 0; i < 16; i++)
     {
-        gameSpace[i] = '-';
+        positionsSelected[i] = '_';
     }
 }
-void Gameboard::setName(string nameInput, int index)
-{
-    name[index] = nameInput;    
-}
-void Gameboard::setGameSpace(int pos, char value)
-{
-    gameSpace[pos] = value;
+
+char* Board::getPositions(void)
+{   //return all the positions on the board
+    return positionsSelected; // get whole string/all chars
+    // static_cast if want to get address of char[]
 }
 
-char Gameboard::getGameSpace(int pos)
-{
-    return gameSpace[pos];
-}
-
-int Gameboard::fourInRow(char sym)
-{
-    int pos, count = 0;
-    // same column
-    for (pos = 0; pos < 16; pos += 4)
+int Board::setPosition(int gridNumber, char user)
+{   //set a given position to x or o
+    if (positionsSelected[gridNumber] == '_')
     {
-        for (size_t incr = 0; incr < 4; incr++)
-        {
-            if (gameSpace[pos + incr] == sym)
-            {
-                ++count;
-                if (count == 4)
-                {
-                    cout << sym << " player is the winner!\n";
-                    return 1;
-                }
-            }
-        }
-        count = 0; // must reset count b4 going to "same row"
+        positionsSelected[gridNumber] = user;
+        return 0;
     }
-
-    // same row
-    for (pos = 0; pos < 4; pos++)
+    else
     {
-        for (size_t incr = 0; incr < 4; incr += 4) // 0 4 8 12
-        {
-            if (gameSpace[pos + incr] == sym)
-            {
-                ++count;
-                if (count == 4)
-                {
-                    cout << sym << " player is the winner!\n";
-                    return 1;
-                }
-            }
-        }
-        count = 0; // must reset count b4 going to "same diagonal"
+        cout << "That postition is taken. ";
+        return -1;
     }
-
-    // same diagonal, top left -> bot right
-    for (pos = 0; pos < 16; pos += 5) // 0 5 10 15
-    {
-        if (gameSpace[pos] == sym) // every pos
-        {
-            ++count;
-            if (count == 4)
-            {
-                cout << sym << " player is the winner!\n";
-                return 1;
-            }
-        }
-    }
-    count = 0;
-
-    // same diagonal, top right -> bot left
-    for (pos = 12; pos > 0; pos -= 3) // 12 9 6 3
-    {
-        if (gameSpace[pos] == sym) // every pos
-        {
-            ++count;
-            if (count == 4)
-            {
-                cout << sym << " player is the winner!\n";
-                return 1;
-            }
-        }
-    }
-    count = 0;
     return 0;
 }
-void Gameboard::printInfo()
-{
-    cout << std::setw(5);
-    cout << "\n";
-    for (int pos = 0; pos < 4; pos++)
+
+/* char Board::determineWinner()
+{ //if 4 in a row, then there is a winner
+    char winner = 'z';
+    winner = checkRows();
+    if (winner == 'z')
+        winner = checkColumns();
+    if (winner == 'z')
+        winner = checkDiagonals();
+    return winner;
+} */
+
+/* char Board::checkRows()
+{   //check the rows for a winner
+    int rows = 0;
+    int columns = 0;
+    int fourInRowX = 0;
+    int fourInRowO = 0;
+
+    //Check rows for a winner
+    for (int rows = 0; rows < 16; rows = rows + 4)
     {
-        for (size_t incr = 0; incr < 4; incr++)
+        for (int i = 0; i < 4; i++)
         {
-            cout << gameSpace[pos + incr] << " ";
+            if (positionsSelected[i + rows] == 'x')
+                fourInRowX++;
+            if (positionsSelected[i + rows] == 'o')
+                fourInRowO++;
         }
-        cout << '\n';
+        if (fourInRowX == 4)
+        {
+            winner = 'x';
+            return 'x';
+        }
+        if (fourInRowO == 4)
+        {
+            winner = 'o';
+            return 'o';
+        }
+        fourInRowX = 0;
+        fourInRowO = 0;
     }
+    return 'z';
 }
+
+char Board::checkColumns()
+{ //check the columns for a winner
+    int rows = 0;
+    int columns = 0;
+    int fourInRowX = 0;
+    int fourInRowO = 0;
+
+    //Check columns for a winner
+    for (int columns = 0; columns < 4; columns++)
+    {
+        for (int i = 0; i < 16; i = i + 4)
+        {
+            if (positionsSelected[i + columns] == 'x')
+                fourInRowX++;
+            if (positionsSelected[i + columns] == 'o')
+                fourInRowO++;
+        }
+        if (fourInRowX == 4)
+        {
+            winner = 'x';
+            return 'x';
+        }
+        if (fourInRowO == 4)
+        {
+            winner = 'o';
+            return 'o';
+        }
+        fourInRowX = 0;
+        fourInRowO = 0;
+    }
+    return 'z';
+}
+
+char Board::checkDiagonals()
+{ //check the diagonals for a winner
+    char winner = 'z';
+    int fourInRowX = 0;
+    int fourInRowO = 0;
+
+    //check left to right diagonal
+    for (int i = 0; i < 16; i = i + 5)
+    {
+        if (positionsSelected[i] == 'x')
+            fourInRowX++;
+        if (positionsSelected[i] == 'o')
+            fourInRowO++;
+    }
+
+    //check right to left diagonal
+    if (fourInRowO != 4 and fourInRowX != 4)
+    {
+        fourInRowX = 0;
+        fourInRowO = 0;
+        for (int i = 3; i < 15; i = i + 3)
+        {
+            if (positionsSelected[i] == 'x')
+                fourInRowX++;
+            if (positionsSelected[i] == 'o')
+                fourInRowO++;
+        }
+    }
+
+    if (fourInRowX == 4)
+    {
+        winner = 'x';
+        return winner;
+    }
+    if (fourInRowO == 4)
+    {
+        winner = 'o';
+        return winner;
+    }
+    fourInRowX = 0;
+    fourInRowO = 0;
+    return winner;
+} */

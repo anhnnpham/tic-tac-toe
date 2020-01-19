@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+
+main2.cpp
+mainClasses2.cpp
+mainFunctions2.cpp
+in.txt

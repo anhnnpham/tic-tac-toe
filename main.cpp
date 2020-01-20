@@ -4,59 +4,49 @@
 int main()
 {
     Board gameBoard;
+
     string nameX;
     string nameO;
-
-    int tieGame = 0;
-    char gameWinner = 'z';
-    int numTurns = 0;
-
     //get the names of the players
     getUserNames(nameX, nameO);
 
+    bool isWinner;
+    int numTurns = 0;
+    char symbol;
     //the game is played for 8 turns maximum
     while (numTurns < 8)
     {
+        symbol = 'x'; // x's turn
         //print a board that has the postions numbered
         printTheBoard(gameBoard);
-        //ask player x where they want to put an 'x'
-        printUserPrompt(nameX, 'x');
+        //ask player X where they want to put an 'x'
+        printUserPrompt(nameX, symbol);
         //check that the input is a valid position and that
         //it has not already been taken
-        checkResponse(gameBoard, 'x');
+        checkResponse(gameBoard, symbol);
 
         //check to see if player 'x' has four in a row somewhere on the board
-        gameWinner = determineWinner(gameBoard);
+        isWinner = determineWinner(gameBoard, symbol, nameX);
         //if player 'x' has won, end the game
-        if (gameWinner != 'z')
-        {
-            printTheBoard(gameBoard);
-            // writeTheBoard(gameBoard);
-            printGameWinner(gameBoard, nameX, nameO);
-            break;
-        }
+        if (isWinner)
+            return 0;
 
-        //Now do the same for player 'o'
+        symbol = 'o'; // o's turn
         printTheBoard(gameBoard);
-        //ask player x where they want to put an 'o'
-        printUserPrompt(nameO, 'o');
-        checkResponse(gameBoard, 'o');
+        //ask player O where they want to put an 'o'
+        printUserPrompt(nameO, symbol);
+        checkResponse(gameBoard, symbol);
 
         //check to see if player 'o' has four in a row somewhere on the board
-        gameWinner = determineWinner(gameBoard);
+        isWinner = determineWinner(gameBoard, symbol, nameO);
         //if player 'o' has won, end the game
-        if (gameWinner != 'z')
-        {
-            printTheBoard(gameBoard);
-            // writeTheBoard(gameBoard);
-            printGameWinner(gameBoard, nameX, nameO);
-            break;
-        }
-        numTurns++;
+        if (isWinner)
+            return 0;
+        
+        numTurns++; // end of 1 turn
     }
-
+    
     //if there is no winner at this point, the game is a tie
-    if (numTurns >= 8)
-        cout << "Tie game.\n";
+    cout << "Tie game.\n";
     return 0;
 }

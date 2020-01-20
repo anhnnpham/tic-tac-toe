@@ -4,14 +4,13 @@
 int main()
 {
     Board gameBoard;
-
     string nameX;
     string nameO;
     //get the names of the players
     getUserNames(nameX, nameO);
 
-    bool isWinner;
     int numTurns = 0;
+    bool isWinner;
     char symbol;
     //the game is played for 8 turns maximum
     while (numTurns < 8)

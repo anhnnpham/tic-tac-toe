@@ -7,7 +7,7 @@ void checkResponse(Board &boardIn, char input)
     {
         position = getUserResponse();
         userInput = boardIn.setPosition(position, input);
-    } 
+    }
     while (userInput == -1);
 }
 
@@ -81,7 +81,7 @@ int getUserResponse()
 }
 
 bool determineWinner(Board gameBoard, char symbol, string nameIn)
-{   //if 4 in a row, then there is a winner
+{   //if 4 in a row/column/diagonal, then there is a winner
     bool isWinner = false;
     isWinner = gameBoard.checkRows(symbol);
     if (!isWinner)

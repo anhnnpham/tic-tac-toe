@@ -59,7 +59,6 @@ bool Board::checkRows(char symbol)
             fourInRowX++;
             if (fourInRowX == 4)
             {
-                // ('x');
                 return true;
             }
         }
@@ -88,7 +87,6 @@ bool Board::checkColumns(char symbol)
         }
         if (fourInRowX == 4)
         {
-            // ('x');
             return true;
         }
         fourInRowX = 0;
@@ -111,7 +109,6 @@ bool Board::checkDiagonals(char symbol)
     }
     if (fourInRowX == 4)
     {
-        // ('x');
         return true;
     }
 
@@ -126,7 +123,6 @@ bool Board::checkDiagonals(char symbol)
     }
     if (fourInRowX == 4)
     {
-        // ('x');
         return true;
     }
     return false;
